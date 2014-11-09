@@ -1,0 +1,5 @@
+Berufe: http://home.gibm.ch/interfaces/133/berufe.php
+
+Klassen: http://home.gibm.ch/interfaces/133/klassen.php?beruf_id=10
+
+Tafel: http://home.gibm.ch/interfaces/133/tafel.php?klasse_id=1481221&woche=44-2012
