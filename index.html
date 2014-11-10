@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!--jQuery - Google CSN-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!--Bootstrap - Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	<!--Bootstrap - Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+	<!--Bootstrap - Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<title>Class Schedule</title>
+</head>
+<body>
+<div class ="content"> 
+	<h1 class="page-header">Class Schedule</h1>
+	<div class="dropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" id="cmbClasses" data-toggle="dropdown">
+			Dropdown
+			<span class="caret"></span>
+		</button>
+		<ul id="itemsClasses" class="dropdown-menu" role="menu" aria-labelledby="cmbClasses">
+		<!--EXAMPLE: 
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+		-->
+		</ul>
+	</div>
+	<script>
+		$(document).ready(function()  {
+			$.ajax({
+				url: 'http://home.gibm.ch/interfaces/133/berufe.php',
+				type: 'get',
+				dataType: 'json',
+				success: function(data) {
+					var html =  '';
+					$.each(data, function(key, value) {
+						html += '<li role="presentation"><a id="' + value['beruf_id'] + '" role="menuitem" tabindex="-1" href="#">' + value['beruf_name'] + '</a></li>';
+					});
+					$('#itemsClasses').html(html);
+				},
+				error: function(e) {
+					alert('error');
+				}
+			});
+		});
+	</script>
+	
+</div>
+</body>
+</html>
