@@ -17,7 +17,7 @@
 	<h1 class="page-header">Class Schedule</h1>
 	<div class="dropdown">
 		<button class="btn btn-default dropdown-toggle" type="button" id="cmbClasses" data-toggle="dropdown">
-			Dropdown
+			Klasse auswählen...
 			<span class="caret"></span>
 		</button>
 		<ul id="itemsClasses" class="dropdown-menu" role="menu" aria-labelledby="cmbClasses">
@@ -26,6 +26,9 @@
 		-->
 		</ul>
 	</div>
+	
+	<select id="options"></select>
+	
 	<script>
 		$(document).ready(function()  {
 			$.ajax({
@@ -34,10 +37,13 @@
 				dataType: 'json',
 				success: function(data) {
 					var html =  '';
+					var htmlS = '';
 					$.each(data, function(key, value) {
 						html += '<li role="presentation"><a id="' + value['beruf_id'] + '" role="menuitem" tabindex="-1" href="#">' + value['beruf_name'] + '</a></li>';
+						htmlS += '<option value="' + value['beruf_id'] + '">' + value['beruf_name'] + '</option>'
 					});
 					$('#itemsClasses').html(html);
+					$('#options').html(htmlS);
 				},
 				error: function(e) {
 					alert('error');
@@ -45,7 +51,6 @@
 			});
 		});
 	</script>
-	
 </div>
 </body>
 </html>
