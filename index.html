@@ -10,45 +10,49 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
 	<!--Bootstrap - Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	
+	<script src="functions.js"></script>
+	
 	<title>Class Schedule</title>
 </head>
 <body>
-<div class ="content"> 
+<div class ="container"> 
 	<h1 class="page-header">Class Schedule</h1>
-	<div class="dropdown">
-		<button class="btn btn-default dropdown-toggle" type="button" id="cmbClasses" data-toggle="dropdown">
-			Klasse auswählen...
-			<span class="caret"></span>
-		</button>
-		<ul id="itemsClasses" class="dropdown-menu" role="menu" aria-labelledby="cmbClasses">
-		<!--EXAMPLE: 
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-		-->
-		</ul>
-	</div>
 	
-	<select id="options"></select>
+	<p><select id="jobs" class="form-control"></select></p>
+	
+	<p><select id="classes" class="form-control sr-only"></select></p>
+	
+	<!--<table id="lessons" class="table sr-only"></table>-->
+	
+	<div id="lessons_div" class="panel panel-primary sr-only">
+		<div class="panel-heading">Lessons</div>
+		<table id="lessons" class="table table-hover"></table>
+	</div>
 	
 	<script>
 		$(document).ready(function()  {
-			$.ajax({
-				url: 'http://home.gibm.ch/interfaces/133/berufe.php',
-				type: 'get',
-				dataType: 'json',
-				success: function(data) {
-					var html =  '';
-					var htmlS = '';
-					$.each(data, function(key, value) {
-						html += '<li role="presentation"><a id="' + value['beruf_id'] + '" role="menuitem" tabindex="-1" href="#">' + value['beruf_name'] + '</a></li>';
-						htmlS += '<option value="' + value['beruf_id'] + '">' + value['beruf_name'] + '</option>'
-					});
-					$('#itemsClasses').html(html);
-					$('#options').html(htmlS);
-				},
-				error: function(e) {
-					alert('error');
-				}
+			
+			//dropdown jobs selection changed
+			$('#jobs').change(function() {
+				//fill dropdown classes
+				var beruf_id = $('#jobs').val();
+				fillDdClasses(beruf_id);
 			});
+			
+			//dropdown classes selection changed
+			$('#classes').change(function() {
+				//fill dropdown classes
+				var klasse_id = $('#classes').val();
+				var woche = '44-2012';
+				fillTblLessons(klasse_id, woche);
+			});
+			
+			
+			//fill dropdowns
+			fillDdJobs();
+			//fillDdClasses($('#jobs').val());
+			//fillTblLessons($('#classes').val(), '44-2012');
 		});
 	</script>
 </div>
