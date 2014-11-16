@@ -87,41 +87,81 @@ function fillTblLessons(class_id, week_nr, year) {
 		type: 'get',
 		dataType: 'json',
 		success: function(data) {
+			var cache_date = '';
+		
 			//create html
 			var html = '';
 			
-			//table head
-			html += '<tr>';
-			html += '	<th>Datum</th>';
-			html += '	<th>Wochentag</th>';
-			html += '	<th>Von</th>';
-			html += '	<th>Bis</th>';
-			html += '	<th>Lehrer</th>';
-			html += '	<th>Fach</th>';
-			html += '	<th>Raum</th>';
-			html += '	<th>Kommentar</th>';
-			html += '</tr>';
-			
-			//table body
 			$.each(data, function(key, value) {
-				html += '<tr>';
-				html += '	<td>' + getFormattedDate(value['tafel_datum']) + '</td>';
-				html += '	<td>' + getWeekdayName(parseInt(value['tafel_wochentag'])) + '</td>';
-				html += '	<td>' + getFormattedTime(value['tafel_von']) + '</td>';
-				html += '	<td>' + getFormattedTime(value['tafel_bis']) + '</td>';
-				html += '	<td>' + value['tafel_lehrer'] + '</td>';
-				html += '	<td>' + value['tafel_longfach'] + '</td>';
-				html += '	<td>' + value['tafel_raum'] + '</td>';
-				html += '	<td>' + value['tafel_kommentar'] + '</td>';
-				html += '</tr>';
+				if(value['tafel_datum'] != cache_date) {
+					//cache date
+					cache_date = value['tafel_datum'];
+					//table header
+					html += getTableHeaderRowHtml(value);
+				}
+				
+				
+				//table body
+				html += getTableRowHtml(value);
 			});
 			
+			//insert html in table
 			$('#lessons').html(html);
 		},
 		error: function(e) {
 			alert('Error in lessons!');
 		}
 	});
+}
+
+function getTableHeaderRowHtml(array) {
+	var date = getFormattedDate(array['tafel_datum']);
+	var weekday = getWeekdayName(parseInt(array['tafel_wochentag']));
+
+	var html = '';
+	
+	html += '<tr>';
+	html += '	<th>';
+	html += '		<div class="col-sm-12">';
+	html += '			<h3>' + weekday + ', ' + date + '</h3>';
+	html += '		</div>';
+	html += '	</th>';
+	html += '</tr>';
+	
+	return html;
+}
+
+function getTableRowHtml(array) {
+	time_from = getFormattedTime(array['tafel_von']);
+	time_to = getFormattedTime(array['tafel_bis']);
+	subject = array['tafel_longfach'];
+	teacher = array['tafel_lehrer'];
+	room = array['tafel_raum'];
+	comment = array['tafel_kommentar'];
+
+	var html = '';
+	
+	html += '<tr>';
+	html += '	<td>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p><strong>' + time_from + ' - ' + time_to + '</strong></p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-3">';
+	html += '			<p>' + subject + '</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p>' + teacher + '</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p>' + room + '</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-3">';
+	html += '			<p>' + comment + '</p>';
+	html += '		</div>';
+	html += '	</td>';
+	html += '</tr>';
+	
+	return html;
 }
 
 function getFormattedDate(date) {
