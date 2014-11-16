@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8" />
+	<meta name="author" content="Rosario Brancato" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
 	<!--jQuery - Google CSN-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<!--Bootstrap - Latest compiled and minified CSS -->
@@ -20,18 +23,23 @@
 <div class ="container"> 
 	<h1 class="page-header">Stundenplan</h1>
 	
-	<p><select id="jobs" class="form-control"></select></p>
-	
-	<p><select id="classes" class="form-control sr-only"></select></p>
-	
-	<div id="lessons_div" class="panel panel-primary sr-only">
-		<div id="lessons_heading" class="panel-heading text-center">
-			<button id="week_move_left" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-left"></span></button>
-			<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
-			<button id="week_move_right" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-right"></span></button>
+	<div class="row">
+		<div class="col-sm-6">
+			<p><select id="jobs" class="form-control"></select></p>
 		</div>
-		<table id="lessons" class="table table-hover"></table>
+		<div class="col-sm-6">
+			<p><select id="classes" class="form-control sr-only"></select></p>
+		</div>
 	</div>
+	
+		<div id="lessons_div" class="panel panel-primary sr-only">
+			<div id="lessons_heading" class="panel-heading text-center">
+				<button id="week_move_left" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-left"></span></button>
+				<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
+				<button id="week_move_right" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-right"></span></button>
+			</div>
+			<table id="lessons" class="table table-hover"></table>
+		</div>
 	
 	<script>
 		$(document).ready(function()  {
