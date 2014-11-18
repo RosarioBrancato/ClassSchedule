@@ -14,6 +14,9 @@
 	<!--Bootstrap - Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	
+	<!--Plugin-->
+	<script src="plugin/jquery.cookie.js"></script>
+	
 	<!--My JavaScript-->
 	<script src="functions.js"></script>
 	
@@ -44,24 +47,19 @@
 	<script>
 		$(document).ready(function()  {
 			//fill dropdown jobs, the rest will be filled too.
-			fillDdJobs();
+			firstLoading();
 			
 			//dropdown jobs selection changed
 			$('#jobs').change(function() {
-				//get values
-				var job_id = $('#jobs').val();
 				//fill dropdown classes
-				fillDdClasses(job_id);
+				fillDdClasses();
 			});
 			
 			//dropdown classes selection changed
 			$('#classes').change(function() {
-				//get values
-				var class_id = $('#classes').val();
-				var week_nr = $('#week_nr').text();
-				var year = $('#week_year').text();
 				//fill dropdown classes
-				fillTblLessons(class_id, week_nr, year);
+				fillTblLessons();
+				
 			});
 			
 			//button week_move_left clicked

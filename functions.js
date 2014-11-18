@@ -1,3 +1,17 @@
+function firstLoading() {
+	var cookie = getCookieObj();
+	
+	fillDdJobs();
+	fillDdClasses();
+	fillTblLessons();
+	
+	/*if(cookie != null && typeof(cookie) != 'undefined') {
+		$('#jobs').val(cookie.job_id);
+		fillDdClasses(cookie.class_id);
+		fillTblLessons(cookie.week_nr, cookie.year);
+	}*/
+}
+
 function fillDdJobs() {
 	$.ajax({
 		url: 'http://home.gibm.ch/interfaces/133/berufe.php',
@@ -15,14 +29,14 @@ function fillDdJobs() {
 		},
 		error: function(e) {
 			alert('Error in jobs!');
-		},
-		complete: function() {
-			//get values
-			var job_id = $('#jobs').val();
-			//fill dropdown classes
-			fillDdClasses(job_id);
 		}
 	});
+}
+
+function fillDdClasses() {
+	//get value
+	var job_id = $('#jobs').val();
+	fillDdClasses(job_id);
 }
 
 function fillDdClasses(job_id) {
@@ -51,25 +65,24 @@ function fillDdClasses(job_id) {
 			},
 			error: function(e) {
 				alert('Error in classes!');
-			},
-			complete: function() {
-				//get values
-				var class_id = $('#classes').val();
-				var today = new Date();
-				var week_nr = today.getWeek();
-				var year = today.getFullYear();
-				//fill dropdown classes
-				fillTblLessons(class_id, week_nr, year);
 			}
 		});
 		
 	} else {
 		$('#classes').html('').addClass('sr-only');
-		$('#lessons').html('').addClass('sr-only');
 	}
 	
 	//reenable dropdown classes
 	$('#classes').removeClass('disabled');
+}
+
+function fillTblLessons() {
+	//get values
+	var class_id = $('#classes').val();
+	var week_nr = $('#week_nr').text();
+	var year = $('#week_year').text();
+
+	fillTblLessons(class_id, week_nr, year);
 }
 
 function fillTblLessons(class_id, week_nr, year) {
@@ -104,6 +117,10 @@ function fillTblLessons(class_id, week_nr, year) {
 				//table body
 				html += getTableRowHtml(value);
 			});
+			
+			if(html.length <= 0) {
+				html = '<tr><td><div class="col-sm-12">Kein Unterricht</div></td></tr>';
+			}
 			
 			//insert html in table
 			$('#lessons').html(html);
@@ -226,3 +243,14 @@ Date.prototype.getWeek = function() {
 	var dayOfYear = ((date - onejan + 86400000)/86400000);
 	return Math.ceil(dayOfYear/7)
 };
+
+function saveCookie() {
+	$.cookie('job_id', $('#jobs').val());
+	$.cookie('class_id', $('#classes').val());
+	$.cookie('week_nr', $('#week_nr').text());
+	$.cookie('year', $('#week_year').text());
+}
+
+function getCookieObj() {
+	return $.cookie();
+}
