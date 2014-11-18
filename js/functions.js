@@ -1,18 +1,23 @@
 function firstLoading() {
 	var cookie = getCookieObj();
 	
-	fillDdJobs();
-	fillDdClasses();
-	fillTblLessons();
-	
-	/*if(cookie != null && typeof(cookie) != 'undefined') {
-		$('#jobs').val(cookie.job_id);
-		fillDdClasses(cookie.class_id);
-		fillTblLessons(cookie.week_nr, cookie.year);
-	}*/
+	if(isCookieObjValide(cookie)) {
+		//job
+		fillDdJobs(cookie.job_id);
+		//class
+		fillDdClasses(cookie.job_id, cookie.class_id);
+		//lessons
+		fillTblLessons(cookie.class_id, cookie.week_nr, cookie.year);
+		
+		
+	} else {
+		fillDdJobs();
+		fillDdClasses();
+		fillTblLessons();
+	}
 }
 
-function fillDdJobs() {
+function fillDdJobs(job_id) {
 	$.ajax({
 		url: 'http://home.gibm.ch/interfaces/133/berufe.php',
 		type: 'get',
@@ -29,23 +34,30 @@ function fillDdJobs() {
 		},
 		error: function(e) {
 			alert('Error in jobs!');
+		},
+		complete: function(jqXHR, textStatus ) {
+			if(job_id != null) {
+				$('#jobs').val(job_id);
+			}
 		}
 	});
+	
+	return false;
 }
 
-function fillDdClasses() {
-	//get value
-	var job_id = $('#jobs').val();
-	fillDdClasses(job_id);
-}
-
-function fillDdClasses(job_id) {
-	//disable dropdown classes, in case the ajax would take some time.
+function fillDdClasses(job_id, class_id) {
+	//validate parameter
+	if(job_id == null) {
+		job_id = $('#jobs').val();
+	}
+	
+	//disable dropdown classes, in case the ajax-request would take some time.
 	$('#classes').addClass('disabled');
 	
 	if(job_id != null && job_id.length > 0) {
+		var url = 'http://home.gibm.ch/interfaces/133/klassen.php?beruf_id=' + job_id;
 		$.ajax({
-			url: 'http://home.gibm.ch/interfaces/133/klassen.php?beruf_id=' + job_id,
+			url: url,
 			type: 'get',
 			dataType: 'json',
 			success: function(data) {
@@ -65,6 +77,11 @@ function fillDdClasses(job_id) {
 			},
 			error: function(e) {
 				alert('Error in classes!');
+			},
+			complete: function(jqXHR, textStatus ) {
+				if(class_id != null) {
+					$('#classes').val(class_id);
+				}
 			}
 		});
 		
@@ -76,16 +93,24 @@ function fillDdClasses(job_id) {
 	$('#classes').removeClass('disabled');
 }
 
-function fillTblLessons() {
-	//get values
-	var class_id = $('#classes').val();
-	var week_nr = $('#week_nr').text();
-	var year = $('#week_year').text();
-
-	fillTblLessons(class_id, week_nr, year);
-}
-
 function fillTblLessons(class_id, week_nr, year) {
+	//validate parameters
+	if(class_id == null) {
+		class_id = $('#classes').val();
+	}
+	if(week_nr == null) {
+		week_nr = $('#week_nr').text();
+	}
+	if(year == null) {
+		year = $('#week_year').text();
+	}
+	//in case table is not loaded yet
+	if(week_nr.length <= 0 || year.length <= 0) {
+		var today = new Date();
+		week_nr = today.getWeek();
+		year = today.getFullYear();
+	}
+	
 	//set visible
 	$('#lessons_div').removeClass('sr-only');
 	
@@ -95,8 +120,9 @@ function fillTblLessons(class_id, week_nr, year) {
 	$('#week_year').text(year);
 	
 	//create table entries
+	var url = 'http://home.gibm.ch/interfaces/133/tafel.php?klasse_id=' + class_id + '&woche=' + week_nr_year;
 	$.ajax({
-		url: 'http://home.gibm.ch/interfaces/133/tafel.php?klasse_id=' + class_id + '&woche=' + week_nr_year,
+		url: url,
 		type: 'get',
 		dataType: 'json',
 		success: function(data) {
@@ -179,78 +205,4 @@ function getTableRowHtml(array) {
 	html += '</tr>';
 	
 	return html;
-}
-
-function getFormattedDate(date) {
-	var d = new Date(date);
-	var month = parseInt(d.getMonth()) + 1;
-	return prependZeros(d.getDate(), 2) + '.' + prependZeros(month, 2) + '.' + d.getFullYear();
-}
-
-function getFormattedTime(time) {
-	var dateString = 'Nov 18 2014 ' + time;
-	
-	var t = new Date(dateString);
-	var hours = parseInt(t.getHours());
-	var min = parseInt(t.getMinutes());
-	return prependZeros(hours, 2) + ':' + prependZeros(min, 2);
-}
-
-function prependZeros(number, length) {
-	var nString = number.toString();
-	var n = '';
-	
-	if(nString.length  < length) {
-		for(i = 0; i < (length - nString.length); i++) {
-			n += '0';
-		}
-	}
-	
-	return n + nString;
-}
-
-function getWeekdayName(number) {
-	switch(number) {
-		case 1:
-			return 'Montag';
-		case 2:
-			return 'Dienstag';
-		case 3:
-			return 'Mittwoch';
-		case 4:
-			return 'Donnerstag';
-		case 5:
-			return 'Freitag';
-		case 6:
-			return 'Samstag';
-		case 7:
-			return 'Sonntag';
-		default:
-			 return '';
-	}
-}
-
-function getTotalWeeksOfYear(year) {
-	var last_day = new Date(year + '-12-31');
-	return last_day.getWeek();
-}
-
-//Quelle: http://zerosixthree.se/snippets/get-week-of-the-year-with-jquery/
-//returns week nr
-Date.prototype.getWeek = function() {
-	var onejan = new Date(this.getFullYear(),0,0);
-	var date = this;
-	var dayOfYear = ((date - onejan + 86400000)/86400000);
-	return Math.ceil(dayOfYear/7)
-};
-
-function saveCookie() {
-	$.cookie('job_id', $('#jobs').val());
-	$.cookie('class_id', $('#classes').val());
-	$.cookie('week_nr', $('#week_nr').text());
-	$.cookie('year', $('#week_year').text());
-}
-
-function getCookieObj() {
-	return $.cookie();
 }

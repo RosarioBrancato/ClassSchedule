@@ -18,7 +18,9 @@
 	<script src="plugin/jquery.cookie.js"></script>
 	
 	<!--My JavaScript-->
-	<script src="functions.js"></script>
+	<script src="js/datetime_utils.js"></script>
+	<script src="js/cookie_utils.js"></script>
+	<script src="js/functions.js"></script>
 	
 	<title>Stundenplan</title>
 </head>
@@ -31,35 +33,40 @@
 			<p><select id="jobs" class="form-control"></select></p>
 		</div>
 		<div class="col-sm-6">
-			<p><select id="classes" class="form-control sr-only"></select></p>
+			<p><select id="classes" class="form-control"></select></p>
 		</div>
 	</div>
 	
-		<div id="lessons_div" class="panel panel-primary sr-only">
-			<div id="lessons_heading" class="panel-heading text-center">
-				<button id="week_move_left" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-left"></span></button>
-				<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
-				<button id="week_move_right" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-right"></span></button>
-			</div>
-			<table id="lessons" class="table table-hover"></table>
+	<div id="lessons_div" class="panel panel-primary sr-only">
+		<div id="lessons_heading" class="panel-heading text-center">
+			<button id="week_move_left" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-left"></span></button>
+			<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
+			<button id="week_move_right" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-right"></span></button>
 		</div>
+		<table id="lessons" class="table table-hover"></table>
+	</div>
+</div>
 	
 	<script>
 		$(document).ready(function()  {
-			//fill dropdown jobs, the rest will be filled too.
+			//fill dropdowns, load cookie
 			firstLoading();
 			
 			//dropdown jobs selection changed
 			$('#jobs').change(function() {
-				//fill dropdown classes
+				//refill dropdowns
 				fillDdClasses();
+				fillTblLessons();
+				//save cookie
+				saveCookie();
 			});
 			
 			//dropdown classes selection changed
 			$('#classes').change(function() {
-				//fill dropdown classes
+				//refill dropdowns
 				fillTblLessons();
-				
+				//save cookie
+				saveCookie();
 			});
 			
 			//button week_move_left clicked
@@ -79,7 +86,9 @@
 				}
 				
 				//fill table lessons
-				fillTblLessons(class_id, week_nr, year);
+				fillTblLessons(class_id, week_nr.toString(), year.toString());
+				//save cookie
+				saveCookie();
 			});
 			
 			//button week_move_right clicked
@@ -99,11 +108,12 @@
 				}
 				
 				//fill table lessons
-				fillTblLessons(class_id, week_nr, year);
+				fillTblLessons(class_id, week_nr.toString(), year.toString());
+				//save cookie
+				saveCookie();
 			});
 			
 		});
 	</script>
-</div>
 </body>
 </html>
