@@ -138,7 +138,7 @@ function getTableRowHtml(array) {
 	teacher = array['tafel_lehrer'];
 	room = array['tafel_raum'];
 	comment = array['tafel_kommentar'];
-
+	
 	var html = '';
 	
 	html += '<tr>';
@@ -171,7 +171,7 @@ function getFormattedDate(date) {
 }
 
 function getFormattedTime(time) {
-	var dateString = '2014-01-01 ' + time;
+	var dateString = 'Nov 18 2014 ' + time;
 	
 	var t = new Date(dateString);
 	var hours = parseInt(t.getHours());
