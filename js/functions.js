@@ -1,4 +1,5 @@
 function firstLoading() {
+	//get object with all cookie values
 	var cookie = getCookieObj();
 	
 	if(isCookieObjValide(cookie)) {
@@ -11,13 +12,14 @@ function firstLoading() {
 		
 		
 	} else {
+		//if no parameter are defined it will load
+		//the rest of the website with default values.
 		fillDdJobs();
-		fillDdClasses();
-		fillTblLessons();
 	}
 }
 
 function fillDdJobs(job_id) {
+	//ajax - fill dropdown
 	$.ajax({
 		url: 'http://home.gibm.ch/interfaces/133/berufe.php',
 		type: 'get',
@@ -30,14 +32,23 @@ function fillDdJobs(job_id) {
 			});
 			
 			//insert html
-			$('#jobs').html(html);
+			if(html.length > 0) {
+				$('#jobs').html(html);
+			} else {
+				$('#jobs').html('<option value="">Keine Berufe gefunden</option>');
+			}
 		},
 		error: function(e) {
+			$('#jobs').html('<option value="">Berufe konnten nicht geladen werden</option>')
 			alert('Error in jobs!');
 		},
 		complete: function(jqXHR, textStatus ) {
 			if(job_id != null) {
+				//set value of cookie
 				$('#jobs').val(job_id);
+			} else {
+				//load classes with the default values
+				fillDdClasses();
 			}
 		}
 	});
@@ -51,46 +62,39 @@ function fillDdClasses(job_id, class_id) {
 		job_id = $('#jobs').val();
 	}
 	
-	//disable dropdown classes, in case the ajax-request would take some time.
-	$('#classes').addClass('disabled');
-	
-	if(job_id != null && job_id.length > 0) {
-		var url = 'http://home.gibm.ch/interfaces/133/klassen.php?beruf_id=' + job_id;
-		$.ajax({
-			url: url,
-			type: 'get',
-			dataType: 'json',
-			success: function(data) {
-				//create HTML
-				var html =  '';
-				$.each(data, function(key, value) {
-					html += '<option value="' + value['klasse_id'] + '">' + value['klasse_name'] + '</option>';
-				});
-				
-				//insert html
-				$('#classes').removeClass('sr-only');
-				if(html.length > 0) {
-					$('#classes').html(html);
-				} else {
-					$('#classes').html('<option value="">Keine Klassen gefunden</option>');
-				}
-			},
-			error: function(e) {
-				alert('Error in classes!');
-			},
-			complete: function(jqXHR, textStatus ) {
-				if(class_id != null) {
-					$('#classes').val(class_id);
-				}
+	//ajax - fill dropdown
+	$.ajax({
+		url: 'http://home.gibm.ch/interfaces/133/klassen.php?beruf_id=' + job_id,
+		type: 'get',
+		dataType: 'json',
+		success: function(data) {
+			//create HTML
+			var html =  '';
+			$.each(data, function(key, value) {
+				html += '<option value="' + value['klasse_id'] + '">' + value['klasse_name'] + '</option>';
+			});
+			
+			//insert html
+			if(html.length > 0) {
+				$('#classes').html(html);
+			} else {
+				$('#classes').html('<option value="">Keine Klassen gefunden</option>');
 			}
-		});
-		
-	} else {
-		$('#classes').html('').addClass('sr-only');
-	}
-	
-	//reenable dropdown classes
-	$('#classes').removeClass('disabled');
+		},
+		error: function(e) {
+			$('#jobs').html('<option value="">Klassen konnten nicht geladen werden</option>')
+			alert('Error in classes!');
+		},
+		complete: function(jqXHR, textStatus ) {
+			if(class_id != null) {
+				//set value of cookie
+				$('#classes').val(class_id);
+			} else  {
+				//load lessons with the default values
+				fillTblLessons();
+			}
+		}
+	});
 }
 
 function fillTblLessons(class_id, week_nr, year) {
@@ -111,18 +115,14 @@ function fillTblLessons(class_id, week_nr, year) {
 		year = today.getFullYear();
 	}
 	
-	//set visible
-	$('#lessons_div').removeClass('sr-only');
-	
 	//week nr and year
 	var week_nr_year = week_nr + '-' + year;
 	$('#week_nr').text(week_nr);
 	$('#week_year').text(year);
 	
-	//create table entries
-	var url = 'http://home.gibm.ch/interfaces/133/tafel.php?klasse_id=' + class_id + '&woche=' + week_nr_year;
+	//ajax - fill table
 	$.ajax({
-		url: url,
+		url: 'http://home.gibm.ch/interfaces/133/tafel.php?klasse_id=' + class_id + '&woche=' + week_nr_year,
 		type: 'get',
 		dataType: 'json',
 		success: function(data) {
@@ -139,11 +139,11 @@ function fillTblLessons(class_id, week_nr, year) {
 					html += getTableHeaderRowHtml(value);
 				}
 				
-				
 				//table body
 				html += getTableRowHtml(value);
 			});
 			
+			// if no lessons
 			if(html.length <= 0) {
 				html = '<tr><td><div class="col-sm-12">Kein Unterricht</div></td></tr>';
 			}
@@ -152,6 +152,7 @@ function fillTblLessons(class_id, week_nr, year) {
 			$('#lessons').html(html);
 		},
 		error: function(e) {
+			$('#lessons').html('<tr><td><div class="col-sm-12">Lektionen konnten nicht geladen werden.</div></td></tr>');
 			alert('Error in lessons!');
 		}
 	});

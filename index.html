@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	
-	<div id="lessons_div" class="panel panel-primary sr-only">
+	<div id="lessons_div" class="panel panel-primary">
 		<div id="lessons_heading" class="panel-heading text-center">
 			<button id="week_move_left" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-left"></span></button>
 			<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
@@ -54,9 +54,9 @@
 			
 			//dropdown jobs selection changed
 			$('#jobs').change(function() {
-				//refill dropdowns
+				//refill dropdown classes with default values
+				//table lessons will be refilled too
 				fillDdClasses();
-				fillTblLessons();
 				//save cookie
 				saveCookie();
 			});
