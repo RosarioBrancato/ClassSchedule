@@ -1,10 +1,14 @@
+//THERE FUNCTIONS HELP THE FORMATTING OF DATE/TIME VALUES
+
 function getFormattedDate(date) {
+	//formats date and returns it as a string
 	var d = new Date(date);
 	var month = parseInt(d.getMonth()) + 1;
 	return prependZeros(d.getDate(), 2) + '.' + prependZeros(month, 2) + '.' + d.getFullYear();
 }
 
 function getFormattedTime(time) {
+	//formats time and returns it as a string
 	var dateString = 'Nov 18 2014 ' + time;
 	
 	var t = new Date(dateString);
@@ -14,6 +18,7 @@ function getFormattedTime(time) {
 }
 
 function prependZeros(number, length) {
+	//prepend zeros till the number length reaches the length
 	var nString = number.toString();
 	var n = '';
 	
@@ -27,6 +32,7 @@ function prependZeros(number, length) {
 }
 
 function getWeekdayName(number) {
+	//returns the name of the week corresponding to the number
 	switch(number) {
 		case 1:
 			return 'Montag';
@@ -48,13 +54,14 @@ function getWeekdayName(number) {
 }
 
 function getTotalWeeksOfYear(year) {
+	//returns the total weeks of the year
 	var last_day = new Date(year + '-12-31');
 	return last_day.getWeek();
 }
 
 //Quelle: http://zerosixthree.se/snippets/get-week-of-the-year-with-jquery/
-//returns week nr
 Date.prototype.getWeek = function() {
+	//returns the week number of the current date object's year
 	var onejan = new Date(this.getFullYear(),0,0);
 	var date = this;
 	var dayOfYear = ((date - onejan + 86400000)/86400000);

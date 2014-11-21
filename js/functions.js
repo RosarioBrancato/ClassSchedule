@@ -1,12 +1,13 @@
+//THESE ARE THE MAIN FUNCTIONS OF THE WEBSITE
+
 function firstLoading() {
 	//transition to nearly invisible
 	$('.container').stop(true).fadeTo(0, 0.001).removeClass('sr-only');
-	//$('.container').css({'display': 'none', 'opacity': 0.0001}).removeClass('sr-only');
 
 	//get object with all cookie values
 	var cookie = getCookieObj();
 	
-	if(isCookieObjValide(cookie)) {
+	if(isCookieObjValid(cookie)) {
 		//job
 		fillDdJobs(cookie.job_id);
 		//class && lessons
@@ -46,8 +47,8 @@ function fillDdJobs(job_id) {
 			}
 		},
 		error: function(e) {
+			//insert html error message
 			$('#jobs').html('<option value="">Berufe konnten nicht geladen werden</option>')
-			alert('Error in jobs!');
 		},
 		complete: function(jqXHR, textStatus ) {
 			if(job_id != null) {
@@ -57,6 +58,9 @@ function fillDdJobs(job_id) {
 				//load classes with the default values
 				fillDdClasses();
 			}
+			
+			//save cookie
+			saveCookieJobId();
 			
 			//transition to visible
 			$('#jobs').stop(true).fadeTo(500, 1);
@@ -93,8 +97,8 @@ function fillDdClasses(job_id, class_id) {
 			}
 		},
 		error: function(e) {
+			//insert html error message
 			$('#jobs').html('<option value="">Klassen konnten nicht geladen werden</option>')
-			alert('Error in classes!');
 		},
 		complete: function(jqXHR, textStatus ) {
 			if(class_id != null) {
@@ -103,6 +107,9 @@ function fillDdClasses(job_id, class_id) {
 			}
 			//load lessons
 			fillTblLessons();
+			
+			//save cookie
+			saveCookieClassId();
 			
 			//transition to visible
 			$('#classes').stop(true).fadeTo(500, 1);
@@ -168,10 +175,13 @@ function fillTblLessons(class_id, week_nr, year) {
 			$('#lessons').html(html);
 		},
 		error: function(e) {
+			//insert html error message
 			$('#lessons').html('<tr><td><div class="col-sm-12">Lektionen konnten nicht geladen werden.</div></td></tr>');
-			alert('Error in lessons!');
 		},
 		complete: function() {
+			//save cookies
+			saveCookies();
+			
 			//transition to visible
 			$('#lessons').stop(true).fadeTo(500, 1);
 		}
@@ -179,11 +189,14 @@ function fillTblLessons(class_id, week_nr, year) {
 }
 
 function getTableHeaderRowHtml(array) {
+	//get values out of array
 	var date = getFormattedDate(array['tafel_datum']);
 	var weekday = getWeekdayName(parseInt(array['tafel_wochentag']));
-
+	
+	//generate html
 	var html = '';
 	
+	//date header
 	html += '<tr>';
 	html += '	<th>';
 	html += '		<div class="col-sm-12">';
@@ -192,10 +205,32 @@ function getTableHeaderRowHtml(array) {
 	html += '	</th>';
 	html += '</tr>';
 	
+	//columns header. hidden on mobile
+	html += '<tr class="hidden-xs">';
+	html += '	<th>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p><strong>Zeit von/bis</strong></p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-3">';
+	html += '			<p>Fach</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p>Lehrer/in</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-2">';
+	html += '			<p>Zimmer</p>';
+	html += '		</div>';
+	html += '		<div class="col-sm-3">';
+	html += '			<p>Kommentar</p>';
+	html += '		</div>';
+	html += '	</th>';
+	html += '</tr>';
+	
 	return html;
 }
 
 function getTableRowHtml(array) {
+	//get values out of array
 	time_from = getFormattedTime(array['tafel_von']);
 	time_to = getFormattedTime(array['tafel_bis']);
 	subject = array['tafel_longfach'];
@@ -203,24 +238,28 @@ function getTableRowHtml(array) {
 	room = array['tafel_raum'];
 	comment = array['tafel_kommentar'];
 	
+	//generate html
 	var html = '';
 	
+	//spans hidden on mobile
 	html += '<tr>';
 	html += '	<td>';
 	html += '		<div class="col-sm-2">';
-	html += '			<p><strong>' + time_from + ' - ' + time_to + '</strong></p>';
+	html += '			<p><strong><span class="visible-xs">Zeit von/bis: </span>' + time_from + ' - ' + time_to + '</strong></p>';
 	html += '		</div>';
 	html += '		<div class="col-sm-3">';
-	html += '			<p>' + subject + '</p>';
+	html += '			<p><span class="visible-xs">Fach: </span>' + subject + '</p>';
 	html += '		</div>';
 	html += '		<div class="col-sm-2">';
-	html += '			<p>' + teacher + '</p>';
+	html += '			<p><span class="visible-xs">Lehrer/in: </span>' + teacher + '</p>';
 	html += '		</div>';
 	html += '		<div class="col-sm-2">';
-	html += '			<p>' + room + '</p>';
+	html += '			<p><span class="visible-xs">Zimmer: </span>' + room + '</p>';
 	html += '		</div>';
 	html += '		<div class="col-sm-3">';
-	html += '			<p>' + comment + '</p>';
+	if(comment.length > 0) {
+	html += '			<p><span class="visible-xs">Kommentar: </span>' + comment + '</p>';
+	}
 	html += '		</div>';
 	html += '	</td>';
 	html += '</tr>';

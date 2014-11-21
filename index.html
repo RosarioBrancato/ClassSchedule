@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<!--Meta-->
 	<meta charset="utf-8" />
 	<meta name="author" content="Rosario Brancato" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -57,16 +58,12 @@
 				//refill dropdown classes with default values
 				//table lessons will be refilled too
 				fillDdClasses();
-				//save cookie
-				saveCookie();
 			});
 			
 			//dropdown classes selection changed
 			$('#classes').bind('change keyup', function() {
 				//refill dropdowns
 				fillTblLessons();
-				//save cookie
-				saveCookie();
 			});
 			
 			//button week_move_left clicked
@@ -87,8 +84,6 @@
 				
 				//fill table lessons
 				fillTblLessons(class_id, week_nr.toString(), year.toString());
-				//save cookie
-				saveCookie();
 			});
 			
 			//button week_move_right clicked
@@ -109,8 +104,6 @@
 				
 				//fill table lessons
 				fillTblLessons(class_id, week_nr.toString(), year.toString());
-				//save cookie
-				saveCookie();
 			});
 			
 		});
