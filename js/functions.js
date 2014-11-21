@@ -1,24 +1,31 @@
 function firstLoading() {
+	//transition to nearly invisible
+	$('.container').stop(true).fadeTo(0, 0.001).removeClass('sr-only');
+	//$('.container').css({'display': 'none', 'opacity': 0.0001}).removeClass('sr-only');
+
 	//get object with all cookie values
 	var cookie = getCookieObj();
 	
 	if(isCookieObjValide(cookie)) {
 		//job
 		fillDdJobs(cookie.job_id);
-		//class
+		//class && lessons
 		fillDdClasses(cookie.job_id, cookie.class_id);
-		//lessons
-		fillTblLessons(cookie.class_id, cookie.week_nr, cookie.year);
-		
 		
 	} else {
 		//if no parameter are defined it will load
 		//the rest of the website with default values.
 		fillDdJobs();
 	}
+	
+	//transition to visible
+	$('.container').stop(true).fadeTo(500, 1);
 }
 
 function fillDdJobs(job_id) {
+	//transition to  nearly invisible
+	$('#jobs').stop(true).fadeTo(0, 0.001).removeClass('sr-only');
+
 	//ajax - fill dropdown
 	$.ajax({
 		url: 'http://home.gibm.ch/interfaces/133/berufe.php',
@@ -50,13 +57,17 @@ function fillDdJobs(job_id) {
 				//load classes with the default values
 				fillDdClasses();
 			}
+			
+			//transition to visible
+			$('#jobs').stop(true).fadeTo(500, 1);
 		}
 	});
-	
-	return false;
 }
 
 function fillDdClasses(job_id, class_id) {
+	//transition to nearly invisible
+	$('#classes').stop(true).fadeTo(0, 0.001).removeClass('sr-only');
+	
 	//validate parameter
 	if(job_id == null) {
 		job_id = $('#jobs').val();
@@ -89,15 +100,20 @@ function fillDdClasses(job_id, class_id) {
 			if(class_id != null) {
 				//set value of cookie
 				$('#classes').val(class_id);
-			} else  {
-				//load lessons with the default values
-				fillTblLessons();
 			}
+			//load lessons
+			fillTblLessons();
+			
+			//transition to visible
+			$('#classes').stop(true).fadeTo(500, 1);
 		}
 	});
 }
 
 function fillTblLessons(class_id, week_nr, year) {
+	//transition to nearly invisible
+	$('#lessons').stop(true).fadeTo(0, 0.001).removeClass('sr-only');
+	
 	//validate parameters
 	if(class_id == null) {
 		class_id = $('#classes').val();
@@ -154,6 +170,10 @@ function fillTblLessons(class_id, week_nr, year) {
 		error: function(e) {
 			$('#lessons').html('<tr><td><div class="col-sm-12">Lektionen konnten nicht geladen werden.</div></td></tr>');
 			alert('Error in lessons!');
+		},
+		complete: function() {
+			//transition to visible
+			$('#lessons').stop(true).fadeTo(500, 1);
 		}
 	});
 }

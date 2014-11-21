@@ -30,10 +30,10 @@
 	
 	<div class="row">
 		<div class="col-sm-6">
-			<p><select id="jobs" class="form-control"></select></p>
+			<p><select id="jobs" class="form-control sr-only"></select></p>
 		</div>
 		<div class="col-sm-6">
-			<p><select id="classes" class="form-control"></select></p>
+			<p><select id="classes" class="form-control sr-only"></select></p>
 		</div>
 	</div>
 	
@@ -43,7 +43,7 @@
 			<span>Woche <span id="week_nr"></span> Jahr <span id="week_year"></span></span>
 			<button id="week_move_right" class="btn btn-warning"><span class="glyphicon glyphicon-chevron-right"></span></button>
 		</div>
-		<table id="lessons" class="table table-hover"></table>
+		<table id="lessons" class="table table-hover sr-only"></table>
 	</div>
 </div>
 	
@@ -53,7 +53,7 @@
 			firstLoading();
 			
 			//dropdown jobs selection changed
-			$('#jobs').change(function() {
+			$('#jobs').bind('change keyup', function() {
 				//refill dropdown classes with default values
 				//table lessons will be refilled too
 				fillDdClasses();
@@ -62,7 +62,7 @@
 			});
 			
 			//dropdown classes selection changed
-			$('#classes').change(function() {
+			$('#classes').bind('change keyup', function() {
 				//refill dropdowns
 				fillTblLessons();
 				//save cookie
