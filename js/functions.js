@@ -208,20 +208,20 @@ function getTableHeaderRowHtml(array) {
 	//columns header. hidden on mobile
 	html += '<tr class="hidden-xs">';
 	html += '	<th>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p><strong>Zeit von/bis</strong></p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><strong>Zeit von/bis</strong></p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-3">';
-	html += '			<p>Fach</p>';
+	html += '		<div class="col-sm-3 div-to-block">';
+	html += '			<p class="p-text-vertical-center">Fach</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p>Lehrer/in</p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center">Lehrer</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p>Zimmer</p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center">Zimmer</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-3">';
-	html += '			<p>Kommentar</p>';
+	html += '		<div class="col-sm-3 div-to-block">';
+	html += '			<p class="p-text-vertical-center">Kommentar</p>';
 	html += '		</div>';
 	html += '	</th>';
 	html += '</tr>';
@@ -244,23 +244,23 @@ function getTableRowHtml(array) {
 	//spans hidden on mobile
 	html += '<tr>';
 	html += '	<td>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p><strong><span class="visible-xs">Zeit von/bis: </span>' + time_from + ' - ' + time_to + '</strong></p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><strong><span class="visible-xs margin-top-5">Zeit von/bis: </span>' + time_from + ' - ' + time_to + '</strong></p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-3">';
-	html += '			<p><span class="visible-xs">Fach: </span>' + subject + '</p>';
+	html += '		<div class="col-sm-3 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><span class="visible-xs margin-top-20">Fach: </span>' + subject + '</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p><span class="visible-xs">Lehrer/in: </span>' + teacher + '</p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><span class="visible-xs margin-top-20">Lehrer/in: </span>' + teacher + '</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-2">';
-	html += '			<p><span class="visible-xs">Zimmer: </span>' + room + '</p>';
+	html += '		<div class="col-sm-2 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><span class="visible-xs margin-top-20">Zimmer: </span>' + room + '</p>';
 	html += '		</div>';
-	html += '		<div class="col-sm-3">';
 	if(comment.length > 0) {
-	html += '			<p><span class="visible-xs">Kommentar: </span>' + comment + '</p>';
-	}
+	html += '		<div class="col-sm-3 div-to-block">';
+	html += '			<p class="p-text-vertical-center"><span class="visible-xs margin-top-20">Kommentar: </span>' + comment + '</p>';
 	html += '		</div>';
+	}
 	html += '	</td>';
 	html += '</tr>';
 	

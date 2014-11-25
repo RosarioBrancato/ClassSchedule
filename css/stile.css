@@ -1,0 +1,30 @@
+/*Bootstrap edit*/
+.no-padding {
+	padding: 0px;
+}
+
+.no-margin {
+	margin: 0px;
+}
+
+.margin-top-5 {
+	margin-top: 5px;
+}
+
+.margin-top-20 {
+	margin-top: 20px;
+}
+
+/*Center text in div*/
+.div-to-block {
+	display: block;
+	height: 30px;
+}
+
+.p-text-vertical-center {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+  	-ms-transform: translateY(-50%);
+  	transform: translateY(-50%);
+}
