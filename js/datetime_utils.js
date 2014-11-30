@@ -1,4 +1,4 @@
-//THERE FUNCTIONS HELP THE FORMATTING OF DATE/TIME VALUES
+//THESE FUNCTIONS HELP THE FORMATTING OF DATE/TIME VALUES
 
 function getFormattedDate(date) {
 	//formats date and returns it as a string
