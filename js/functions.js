@@ -14,7 +14,7 @@ function firstLoading() {
 		fillDdClasses(cookie.job_id, cookie.class_id);
 		
 	} else {
-		//if no parameter are defined it will load
+		//if no parameters are defined it will load
 		//the rest of the website with default values.
 		fillDdJobs();
 	}
